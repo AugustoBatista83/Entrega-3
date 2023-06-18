@@ -1,23 +1,23 @@
-import express from "express"
+import express from 'express';
 const app = express();
-import ProductManager from '../ProductManager.js'; // Importa el archivo de ProductManager
+import { ProductManager } from './ProductManager.js';
 
-const productManager = new ProductManager('.productos.json'); // Crea una instancia de ProductManager con el archivo de productos
 
-// Middleware para analizar el cuerpo de las solicitudes JSON
+const productManager = new ProductManager('../productos.json');
+
 app.use(express.json());
 
 // Endpoint para obtener todos los productos
 app.get('/products', async (req, res) => {
   try {
-    await productManager.loadProductsAsync(); // Carga los productos desde el archivo
-    const limit = req.query.limit; // Obtiene el valor del parámetro de límite (si existe)
+    await productManager.loadProductsAsync();
+    const limit = req.query.limit;
 
     if (limit) {
-      const limitedProducts = productManager.getProducts().slice(0, limit); // Obtiene el número de productos solicitados
+      const limitedProducts = productManager.getProducts().slice(0, limit);
       res.json(limitedProducts);
     } else {
-      res.json(productManager.getProducts()); // Devuelve todos los productos
+      res.json(productManager.getProducts());
     }
   } catch (error) {
     res.status(500).json({ error: 'Error loading products' });
@@ -27,8 +27,8 @@ app.get('/products', async (req, res) => {
 // Endpoint para obtener un producto por su ID
 app.get('/products/:pid', async (req, res) => {
   try {
-    await productManager.loadProductsAsync(); // Carga los productos desde el archivo
-    const productId = parseInt(req.params.pid); // Obtiene el ID del producto como entero
+    await productManager.loadProductsAsync();
+    const productId = parseInt(req.params.pid);
 
     const product = productManager.getProductById(productId);
     if (product) {

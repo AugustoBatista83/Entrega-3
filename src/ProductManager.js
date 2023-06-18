@@ -1,5 +1,4 @@
-const fs = require('fs');
-export default ProductManager;
+import fs from 'fs';
 
 class Product {
   constructor(title, description, price, thumbnail, code, stock) {
@@ -12,16 +11,13 @@ class Product {
   }
 }
 
-class ProductManager {
+export class ProductManager {
   constructor(path) {
     this.path = path; // Ruta del archivo de productos
     this.products = []; // Arreglo para almacenar los productos
     this.id = 0; // ID autoincrementable para asignar a cada producto
-    module.exports = ProductManager;
   }
-
-  
-
+    
   // Carga los productos desde el archivo al arreglo de productos (versión asíncrona)
   async loadProductsAsync() {
     try {
@@ -94,18 +90,15 @@ class ProductManager {
   }
 }
 
-
 //***********************************PRUEBAS********************************************** */
 // Ejemplo de uso de la clase ProductManager
-const manager = new ProductManager("./products.json");
+const manager = new ProductManager("./productos.json");
 
 (async function() {
   // Esperar a que los productos se carguen desde el archivo antes de continuar
   await manager.loadProductsAsync();
 
-  // Agregar dos productos utilizando el método addProduct
-  const manager = new ProductManager('productos.json'); // Crea una instancia de ProductManager con el archivo de productos
-
+  // Agregar productos utilizando el método addProduct
   async function generateCafeteriaProducts() {
     const titles = ["Café Latte", "Cappuccino", "Espresso", "Mocha", "Americano", "Frappé", "Café con Leche", "Macchiato", "Café Molido", "Café Descafeinado"];
     const descriptions = ["Delicioso café con leche", "Cappuccino italiano con espuma de leche", "Café expreso concentrado", "Café con chocolate y leche", "Café negro diluido en agua caliente", "Café frío mezclado con hielo y jarabe", "Café negro con leche caliente", "Café con una pequeña cantidad de leche", "Café en polvo para preparar en casa", "Café sin cafeína"];
@@ -113,7 +106,9 @@ const manager = new ProductManager("./products.json");
     const thumbnails = ["latte.jpg", "cappuccino.jpg", "espresso.jpg", "mocha.jpg", "americano.jpg", "frappe.jpg", "cafe-con-leche.jpg", "macchiato.jpg", "cafe-molido.jpg", "descafeinado.jpg"];
     const codes = ["LATTE001", "CAPPU001", "ESP001", "MOCHA001", "AMER001", "FRAPPE001", "CAFELE001", "MACCH001", "CAFEMO001", "CAFEDS001"];
     const stocks = [10, 15, 20, 12, 18, 8, 14, 9, 25, 16];
-  
+
+    const productPromises = [];
+
     for (let i = 0; i < 10; i++) {
       const product = new Product(
         titles[i],
@@ -123,28 +118,26 @@ const manager = new ProductManager("./products.json");
         codes[i],
         stocks[i]
       );
-  
-      await manager.addProduct(product);
+
+      productPromises.push(manager.addProduct(product));
     }
-  
+
+    await Promise.all(productPromises);
+
     console.log('Productos de cafetería generados con éxito');
   }
-  
-  generateCafeteriaProducts();
-  
+
+  await generateCafeteriaProducts();
 
   // Obtener todos los productos utilizando el método getProducts
   console.log("Todos los productos:", manager.getProducts());
 
   // Obtener un producto por su ID utilizando el método getProductById
-  //console.log("Producto con ID 2:", await manager.getProductById(2));
+  console.log("Producto con ID 2:", manager.getProductById(2));
 
   // Buscar un producto que no existe
-  //console.log("Producto con ID 3:", await manager.getProductById(3));
+  console.log("Producto con ID 3:", manager.getProductById(3));
 
   // Eliminar un producto utilizando el método deleteProduct
-  //await manager.deleteProduct(1);
+  // await manager.deleteProduct(1);
 })();
-
-
-
