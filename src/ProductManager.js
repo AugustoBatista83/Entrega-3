@@ -132,10 +132,10 @@ const manager = new ProductManager("./productos.json");
   await generateCafeteriaProducts();
 
   // Obtener todos los productos utilizando el método getProducts
-  //console.log("Todos los productos:", manager.getProducts());
+  console.log("Todos los productos:", manager.getProducts());
 
   // Obtener un producto por su ID utilizando el método getProductById
-  //console.log("Producto con ID 2:", manager.getProductById(2));
+ console.log("Producto con ID 2:", manager.getProductById(2));
 
   // Buscar un producto que no existe
   //console.log("Producto con ID 3:", manager.getProductById(3));
