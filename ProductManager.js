@@ -1,4 +1,5 @@
 const fs = require('fs');
+export default ProductManager;
 
 class Product {
   constructor(title, description, price, thumbnail, code, stock) {
