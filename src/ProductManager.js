@@ -44,6 +44,12 @@ export class ProductManager {
 
   // Agrega un nuevo producto al arreglo y lo guarda en el archivo
   async addProduct(product) {
+    const existingProduct = this.products.find(p => p.code === product.code); // Verifica si el producto ya existe
+    if (existingProduct) {
+      console.log('Error: Producto duplicado');
+      return;
+    }
+
     product.id = ++this.id; // Asigna un ID autoincrementable al producto
     this.products.push(product); // Agrega el producto al arreglo
     await this.saveProductsAsync(); // Guarda los productos en el archivo
@@ -57,7 +63,7 @@ export class ProductManager {
 
   // Obtiene un producto por su ID
   getProductById(id) {
-    const product = this.products.find((p) => p.id === id); // Busca el producto por su ID
+    const product = this.products.find(p => p.id === id); // Busca el producto por su ID
     if (product) {
       return product;
     } else {
@@ -67,7 +73,7 @@ export class ProductManager {
 
   // Actualiza un producto por su ID
   async updateProduct(id, updatedProduct) {
-    const index = this.products.findIndex((p) => p.id === id); // Busca el índice del producto por su ID
+    const index = this.products.findIndex(p => p.id === id); // Busca el índice del producto por su ID
     if (index !== -1) {
       this.products[index] = { ...updatedProduct, id }; // Actualiza el producto en el arreglo
       await this.saveProductsAsync(); // Guarda los productos en el archivo
@@ -79,7 +85,7 @@ export class ProductManager {
 
   // Elimina un producto por su ID
   async deleteProduct(id) {
-    const index = this.products.findIndex((p) => p.id === id); // Busca el índice del producto por su ID
+    const index = this.products.findIndex(p => p.id === id); // Busca el índice del producto por su ID
     if (index !== -1) {
       this.products.splice(index, 1); // Elimina el producto del arreglo
       await this.saveProductsAsync(); // Guarda los productos en el archivo
@@ -107,8 +113,6 @@ const manager = new ProductManager("./productos.json");
     const codes = ["LATTE001", "CAPPU001", "ESP001", "MOCHA001", "AMER001", "FRAPPE001", "CAFELE001", "MACCH001", "CAFEMO001", "CAFEDS001"];
     const stocks = [10, 15, 20, 12, 18, 8, 14, 9, 25, 16];
 
-    const productPromises = [];
-
     for (let i = 0; i < 10; i++) {
       const product = new Product(
         titles[i],
@@ -119,10 +123,8 @@ const manager = new ProductManager("./productos.json");
         stocks[i]
       );
 
-      productPromises.push(manager.addProduct(product));
+      await manager.addProduct(product);
     }
-
-    await Promise.all(productPromises);
 
     console.log('Productos de cafetería generados con éxito');
   }
@@ -130,13 +132,13 @@ const manager = new ProductManager("./productos.json");
   await generateCafeteriaProducts();
 
   // Obtener todos los productos utilizando el método getProducts
-  console.log("Todos los productos:", manager.getProducts());
+  //console.log("Todos los productos:", manager.getProducts());
 
   // Obtener un producto por su ID utilizando el método getProductById
-  console.log("Producto con ID 2:", manager.getProductById(2));
+  //console.log("Producto con ID 2:", manager.getProductById(2));
 
   // Buscar un producto que no existe
-  console.log("Producto con ID 3:", manager.getProductById(3));
+  //console.log("Producto con ID 3:", manager.getProductById(3));
 
   // Eliminar un producto utilizando el método deleteProduct
   // await manager.deleteProduct(1);

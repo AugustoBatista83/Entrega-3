@@ -1,11 +1,13 @@
 import express from 'express';
+
 const app = express();
+app.use(express.json());
 import { ProductManager } from './ProductManager.js';
 
 
 const productManager = new ProductManager('../productos.json');
 
-app.use(express.json());
+
 
 // Endpoint para obtener todos los productos
 app.get('/products', async (req, res) => {
